@@ -48,8 +48,14 @@ for keys in unique_modules:
 for keys in reduced_data:
     reduced_data[keys] = new_data[keys][:2000,:,:]
     
+dataset = []
+for keys in reduced_data:
+    for data in reduced_data[keys]:
+        dataset.append((keys, data))
+    
+    
 pickle_file = open('dataset.pickle', 'wb')
-pickle.dump(reduced_data, pickle_file)
+pickle.dump(np.array(dataset), pickle_file)
 pickle_file.close()
     
     
