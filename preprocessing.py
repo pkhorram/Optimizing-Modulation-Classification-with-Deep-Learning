@@ -46,7 +46,7 @@ for keys in unique_modules:
     reduced_data[keys] = []
     
 for keys in reduced_data:
-    reduced_data[keys] = new_data[keys][:2000,:,:]
+    reduced_data[keys] = new_data[keys][:5000,:,:]
     
 dataset = []
 for keys in reduced_data:
