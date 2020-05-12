@@ -1,71 +1,63 @@
+import numpy as np
+import pickle 
+from utils import *
+from model import *
+from keras.datasets import cifar10
 from keras.utils import np_utils
 from keras import metrics
-from keras.models import Sequential
-from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D
+from keras.models import Sequential, Model
+from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Input, UpSampling2D, Dropout
 from keras import metrics
 from keras.losses import categorical_crossentropy
 from keras.optimizers import SGD
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np 
-import utils
+from keras.preprocessing.image import ImageDataGenerator
 
-# Be careful: each data is a tuple of class label, and an array of IQ sample of shape (2,128)
-infile = open('dataset.pickle','rb')
-dataset = pickle.load(infile)
-infile.close()
+with open("./dataset", "rb") as p:
+    data = pickle.load(p)
 
-#np.random.shuffle(dataset)
-dataset = np.reshape(dataset, (dataset.shape[0], -1))
+for key in data.keys():
+    dataset = []
+    labels = []
+    for values in data[key]:
+        labels.append(values[0])
+        dataset.append(values[1]) 
+        
+    #print('Starting training for SNR:', key)
+    
+    N = len(dataset)
+    shuffled_indeces = np.random.permutation(range(N))
+    new_dataset = np.array(dataset)[shuffled_indeces,:,:]
+    new_labels = np.array(labels)[shuffled_indeces,:]
+    
+    num_train = int(0.8*N)
+    
+    x_train = new_dataset[:num_train,:,:]
+    y_train = new_labels[:num_train,:]
+    
+    num_val = int(0.1*len(x_train))
+    
+    x_val = x_train[:num_val,:,:]
+    x_val = x_val.reshape(x_val.shape[0],x_val.shape[1],x_val.shape[2], -1)
+    y_val = y_train[:num_val,:]
+    
+    x_train = x_train[num_val:,:,:]
+    x_train = x_train.reshape(x_train.shape[0],x_train.shape[1],x_train.shape[2], -1)
+    y_train = y_train[num_val:,:]
+    
+    x_test = new_dataset[num_train:,:,:]
+    x_test = x_test.reshape(x_test.shape[0],x_test.shape[1],x_test.shape[2], -1)
+    y_test = new_labels[num_train:,:] 
+    
+    #choose model by un-commenting only one of the three:
+    models = new_CNN()
+    sgd = SGD(lr=0.001, momentum=0.9)
+    models.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+    num_epochs = 50
+    history = models.fit(x_train, y_train, epochs=num_epochs, batch_size=100, validation_data=(x_test, y_test))
 
-
-for i in range(len(dataset)):
-    dataset[i][1] = np.reshape(dataset[i][1],(dataset[i][1].shape[0]*dataset[i][1].shape[1],-1)) 
-
-classes = []
-data = []
-for i in range(len(dataset)):
-    classes.append(dataset[i][0])   
-    data.append(dataset[i][1])
-
-data = np.reshape(np.array(data), (np.array(data).shape[0],np.array(data).shape[1])) 
     
     
-label_dict,  digit_label = utils.digtizer(classes)
-classes = utils.onehot_encoder(max(digit_label),  digit_label)    
-
     
-    
-# percentage of training dataset
-train_len = int(len(dataset)*0.8)
-
-train_x = data[:train_len,:]
-train_y = classes[:train_len,:]
-
-test_x = data[train_len:,:]
-test_y = classes[train_len:,:]
-
-
-model = Sequential()
-model.add(Dense(128, input_shape=(256,), activation='relu'))
-model.add(Dense(11, input_shape=(128,), activation='softmax'))
-
-sgd = SGD(lr=0.0001, momentum=0.9)
-model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
-num_epochs = 50
-
-history = model.fit(train_x, train_y, epochs=num_epochs, batch_size=100, validation_data=(test_x, test_y))
-with open('./results', 'wb') as file_pi:
-        pickle.dump(history.history, file_pi)
-
-
-
-
-
-
-
-
-
-
-
-
