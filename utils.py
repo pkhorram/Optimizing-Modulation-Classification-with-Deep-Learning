@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 
-def digtizer(labels):
+def digitizer(labels):
     
     unique_labels = np.unique(labels)
     label_dict = {}
@@ -20,11 +20,10 @@ def digtizer(labels):
     return label_dict,  digit_label 
     
             
-def onehot_encoder(num_class,  labels):
-    
-    vector = np.zeros((len(labels), num_class))
-    for i in range(len(labels)):
-        vector[i,labels[i]-1] = 1
+def onehot_encoder(L_dict,  labels):
+    num_classes = len(L_dict)
+    vector = np.zeros(num_classes)
+    vector[L_dict[labels]-1] = 1
     return vector
 
 
