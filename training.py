@@ -9,12 +9,15 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Input, UpSampling2D, Dropout
 from keras import metrics
 from keras.losses import categorical_crossentropy
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from keras.optimizers import SGD, Adam
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np 
 
-
+import pickle 
+with open('dataset', 'rb') as file:
+    data = pickle.load(file)
 
 accuracies_All = []
 for key in data.keys():
@@ -69,7 +72,7 @@ for key in data.keys():
                          y_train,
                          epochs=num_epochs,
                          batch_size=10,
-                         callbacks = [EarlyStopping(monitor='val_loss', patience=5, verbose=0, mode='min')],
+                         callbacks = [EarlyStopping(monitor='val_loss', patience=5, verbose=0, mode='auto')],
                          validation_data=(x_val, y_val))
     loss, acc = models.evaluate(x_test,y_test, verbose=2)
     accuracies_All.append([acc,key])
