@@ -9,23 +9,23 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, Flatten, Conv2D, MaxPooling2D, Input, UpSampling2D, Dropout
 from keras import metrics
 from keras.losses import categorical_crossentropy
-from keras.optimizers import SGD
+from keras.optimizers import SGD, Adam
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np 
-from keras.preprocessing.image import ImageDataGenerator
 
-with open("./dataset", "rb") as p:
-    data = pickle.load(p)
 
+
+accuracies_All = []
 for key in data.keys():
     dataset = []
     labels = []
     for values in data[key]:
         labels.append(values[0])
         dataset.append(values[1]) 
+
         
-    #print('Starting training for SNR:', key)
+    print('Starting training for SNR:', key)
     
     N = len(dataset)
     shuffled_indeces = np.random.permutation(range(N))
@@ -36,7 +36,7 @@ for key in data.keys():
     
     x_train = new_dataset[:num_train,:,:]
     y_train = new_labels[:num_train,:]
-    
+
     num_val = int(0.1*len(x_train))
     
     x_val = x_train[:num_val,:,:]
@@ -51,13 +51,35 @@ for key in data.keys():
     x_test = x_test.reshape(x_test.shape[0],x_test.shape[1],x_test.shape[2], -1)
     y_test = new_labels[num_train:,:] 
     
+    
     #choose model by un-commenting only one of the three:
     models = new_CNN()
-    sgd = SGD(lr=0.001, momentum=0.9)
-    models.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
-    num_epochs = 50
-    history = models.fit(x_train, y_train, epochs=num_epochs, batch_size=100, validation_data=(x_test, y_test))
+    opt = Adam(learning_rate=0.0001)
+    models.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+    #models.summary()
+    
+    num_epochs = 100
+
+#     earlyStopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0, mode='min')
+#     mcp_save = ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_loss', mode='min')
+#     reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min')
+    
+    
+    history = models.fit(x_train,
+                         y_train,
+                         epochs=num_epochs,
+                         batch_size=10,
+                         callbacks = [EarlyStopping(monitor='val_loss', patience=5, verbose=0, mode='min')],
+                         validation_data=(x_val, y_val))
+    loss, acc = models.evaluate(x_test,y_test, verbose=2)
+    accuracies_All.append([acc,key])
+    
+    
 
     
-    
-    
+    with open('./history/SNR_{}_history.pkl'.format(key), 'wb') as file_pi:
+        pickle.dump(history.history, file_pi)
+
+outfile = open('Accuracy resutls','wb')
+pickle.dump(accuracies_All,outfile)
+outfile.close()
