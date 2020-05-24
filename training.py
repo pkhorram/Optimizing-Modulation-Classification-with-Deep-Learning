@@ -56,12 +56,22 @@ for key in data.keys():
     
     
     #choose model by un-commenting only one of the three:
-    models = new_CNN()
+    # models = new_CNN()
+    # opt = Adam(learning_rate=0.0001)
+    # models.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+    #models.summary()
+
+    models = CLDNN()
     opt = Adam(learning_rate=0.0001)
     models.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
     #models.summary()
+
+    # models = resnet(x_train)
+    # opt = Adam(learning_rate=0.0001)
+    # models.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
+    # models.summary()
     
-    num_epochs = 100
+    num_epochs = 1
 
 #     earlyStopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0, mode='min')
 #     mcp_save = ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_loss', mode='min')
