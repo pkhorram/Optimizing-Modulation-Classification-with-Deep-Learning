@@ -1,7 +1,7 @@
 import numpy as np
 import random 
 import matplotlib.pyplot as plt
-
+from sklearn.metrics import confusion_matrix
 
 
 def digitizer(labels):
@@ -26,5 +26,24 @@ def onehot_encoder(L_dict,  labels):
     vector[L_dict[labels]-1] = 1
     return vector
 
+
+
+def confusion_matrix_create (y_true, y_pred):
+    
+    cm = confusion_matrix(y_true,y_pred)
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    fig, ax = plt.subplots()
+    fig.set_figheight(6)
+    fig.set_figwidth(6)
+    im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    ax.figure.colorbar(im, ax=ax)
+    fmt = '.2f' 
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black")
+    plt.show()
 
 
