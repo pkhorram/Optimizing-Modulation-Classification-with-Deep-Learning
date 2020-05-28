@@ -32,3 +32,8 @@ for keys in d.keys():
 outfile = open('dataset','wb')
 pickle.dump(SNRs,outfile)
 outfile.close()
+
+
+outfile = open('class_dict','wb')
+pickle.dump(label_dict,outfile)
+outfile.close()
