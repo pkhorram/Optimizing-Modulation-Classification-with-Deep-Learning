@@ -71,22 +71,22 @@ for key in data.keys():
     models.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
     
     
-    num_epochs = 100
+    num_epochs = 50
 
     #earlyStopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0, mode='min')
-    mcp_save = ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy', mode='min')
+    mcp_save = ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy')
     #reduce_lr_loss = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, verbose=1, epsilon=1e-4, mode='min')
     #EarlyStopping(monitor='val_loss', patience=5, verbose=0, mode='auto')
     
     history = models.fit(x_train,
-                         y_train,
-                         epochs=num_epochs,
-                         batch_size=10,
-                         #callbacks = [mcp_save],
-                         validation_data=(x_val, y_val))
+                        y_train,
+                        epochs=num_epochs,
+                        batch_size=10,
+                        callbacks = [EarlyStopping(monitor='val_loss', patience=7, verbose=0, mode='auto'), mcp_save],
+                        validation_data=(x_val, y_val))
     
-    models.load_weights(".mdl_wts.hdf5")  
     
+    models.load_weights(".mdl_wts.hdf5") 
     loss, acc = models.evaluate(x_test,y_test, verbose=2)
     accuracies_All.append([acc,key])   
     
@@ -100,6 +100,8 @@ for key in data.keys():
     DICTED = {'1':labels_pred,'2':y_test}
     with open('./history/SNR_{}_prediction.pkl'.format(key), 'wb') as file_pi:
         pickle.dump(DICTED, file_pi)
+    break
+        
     
 outfile = open('Accuracy resutls','wb')
 pickle.dump(accuracies_All,outfile)
