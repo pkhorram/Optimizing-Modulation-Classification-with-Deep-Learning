@@ -100,10 +100,10 @@ for key in data.keys():
     DICTED = {'1':labels_pred,'2':y_test}
     with open('./history/SNR_{}_prediction.pkl'.format(key), 'wb') as file_pi:
         pickle.dump(DICTED, file_pi)
+        
+    with open('./SNR_accuracies.pkl', 'wb') as file_pi:
+        pickle.dump(accuracies_All, file_pi)
     
         
-    
-outfile = open('Accuracy resutls','wb')
-pickle.dump(accuracies_All,outfile)
-outfile.close()
+
        
