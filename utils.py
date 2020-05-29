@@ -44,7 +44,7 @@ def confusion_matrix_create (y_true, y_pred, labels_dict):
 
     for i in range(len(y_true)):
 
-        for key,value in classes.items():
+        for key,value in labels_dict.items():
             if value == y_true[i]:
                 updated_true.append(key)
 
