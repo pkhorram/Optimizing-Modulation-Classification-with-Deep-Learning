@@ -71,7 +71,7 @@ for key in data.keys():
     models.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
     
     
-    num_epochs = 50
+    num_epochs = 100
 
     #earlyStopping = EarlyStopping(monitor='val_loss', patience=10, verbose=0, mode='min')
     mcp_save = ModelCheckpoint('.mdl_wts.hdf5', save_best_only=True, monitor='val_accuracy')
@@ -82,7 +82,7 @@ for key in data.keys():
                         y_train,
                         epochs=num_epochs,
                         batch_size=10,
-                        callbacks = [EarlyStopping(monitor='val_loss', patience=7, verbose=0, mode='auto'), mcp_save],
+                        callbacks = [mcp_save],
                         validation_data=(x_val, y_val))
     
     
