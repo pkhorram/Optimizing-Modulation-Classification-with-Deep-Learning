@@ -9,5 +9,7 @@ Steps to run the code:
 2. Once you have this file, run **"extract_tarfile.py"** to extract the tar file and convert it to pickle format file.
 3. Run **"data_preprocessing.py"** file to extract the data from pickle formatted file for preprocessing. This will generate a file called **'dataset'**.
 4. Now, you are ready to train your CLDNN Model. Just run **"training.py"** and it will start training the code and will save accuracy, loss, best model and confusion matrices for each SNR value.
+5. Once you have the results, you can run **"load_and_plot_results.py"** to generate the plots and confusion matrix. 
+
 
 
