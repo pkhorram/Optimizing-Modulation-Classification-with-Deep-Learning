@@ -62,7 +62,7 @@ for key in data.keys():
     
     
     #choose model by un-commenting only one of the three:
-    models = new_CNN()
+    models = Robust_CNN()
 #     models = CLDNN()    
 #     models = resnet(x_train)
         

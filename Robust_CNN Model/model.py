@@ -14,26 +14,28 @@ from keras import layers
 from keras.callbacks import EarlyStopping
 
 
-def new_CNN():
+def Robust_CNN():
     
     model = Sequential()
     model.add(Conv2D(256, (3, 3), activation='relu', padding='same', init='glorot_uniform', input_shape=(2,128,1)))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(1, 2), padding='valid',  data_format=None))
     model.add(layers.Dropout(.3))
     model.add(Conv2D(128, (3, 3), activation='relu', init='glorot_uniform', padding='same'))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(1, 2), padding='valid', data_format=None))
     model.add(layers.Dropout(.3))
     model.add(Conv2D(64, (3, 3), activation='relu', init='glorot_uniform', padding='same'))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(1, 2), padding='valid', data_format=None))
     model.add(layers.Dropout(.3))
     model.add(Conv2D(64, (3, 3), activation='relu', init='glorot_uniform', padding='same'))
-    model.add(MaxPooling2D(pool_size=(1, 2), padding='valid', data_format=None))
-    model.add(layers.Dropout(.3))
-    model.add(Conv2D(64, (3, 3), activation='relu', init='glorot_uniform', padding='same'))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(1, 2), padding='valid', data_format=None))
     model.add(layers.Dropout(.3))
     model.add(Flatten())
     model.add(Dense(128, activation='relu', init='he_normal'))
+    model.add(BatchNormalization())
     model.add(Dense(11, activation='softmax', init='he_normal'))
     
     return model
