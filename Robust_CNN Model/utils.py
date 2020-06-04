@@ -28,7 +28,7 @@ def onehot_encoder(L_dict,  labels):
 
 
 
-def confusion_matrix_create (y_true, y_pred, labels_dict):
+def confusion_matrix_create (y_true, y_pred, labels_dict, title):
     
     labels = []
     for i in labels_dict.items():
@@ -62,6 +62,9 @@ def confusion_matrix_create (y_true, y_pred, labels_dict):
     ax.figure.colorbar(im, ax=ax)
     ax.set_xticklabels([''] + labels)
     ax.set_yticklabels([''] + labels)
+    ax.set (title=title, 
+            ylabel='True label',
+            xlabel='Predicted label')
     fmt = '.2f' 
     thresh = cm.max() / 2.
     for i in range(cm.shape[0]):
