@@ -5,7 +5,7 @@ from keras.optimizers import Adam
 import os
 import pickle
 import numpy as np
-
+# Use this code only if you want to generate 20 different models corresponding to 20 SNR values
 with open('dataset', 'rb') as file:
     data = pickle.load(file)
 accuracies_All = []
