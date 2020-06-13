@@ -3,6 +3,7 @@ import pickle
 from utils import *
 
 with open("RML2016.10a_dict.pkl", "rb") as p:
+#with open("RML2016.10b.dat", "rb") as p: if you want larger dataset
     d = pickle.load(p, encoding='latin1')
 
 classes = []    
