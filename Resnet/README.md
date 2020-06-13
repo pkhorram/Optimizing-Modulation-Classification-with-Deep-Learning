@@ -1,6 +1,6 @@
 # Improvements to Modulation Classification using Deep Learning
 
-This code implements the CLDNN model given in the following paper, **"Deep Neural Network Architectures for Modulation Classification"**.
+This code implements the ResNet model given in the following paper, **"Deep Neural Network Architectures for Modulation Classification"**.
 Reference: https://ieeexplore.ieee.org/document/8335483
 
 Steps to run the code:
