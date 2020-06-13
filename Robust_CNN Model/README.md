@@ -1,8 +1,10 @@
 # Optimizing-Modulation-Classification-with-Deep-Learning
 
 
-This code implements the CLDNN model given in the following paper, **"Deep Neural Network Architectures for Modulation Classification"**.
-Reference: https://ieeexplore.ieee.org/document/8335483
+This code implements the Robust CNN model given in the following paper, **"Robust and Fast Automatic Modulation
+Classification with CNN under Multipath Fading
+Channels"**.
+Reference: https://arxiv.org/pdf/1911.04970.pdf
 
 Steps to run the code:
 
@@ -16,7 +18,7 @@ Steps to run the code:
 8. Once you have the results, you can run **"load_and_plot_results.py"** to generate the plots and confusion matrix. 
 9. There you go, you are successful in training a model and plotting the results!
 
-Enjoy!
+
 
 
 
